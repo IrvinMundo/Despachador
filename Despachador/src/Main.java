@@ -62,4 +62,11 @@ public class Main {
 		}
 		BufferedReader bf = new BufferedReader(fr);
 	}
+	
+	//llenar los micros
+	void asignarProcesos(){
+		
+	}
+	
+	
 }
