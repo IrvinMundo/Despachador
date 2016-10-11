@@ -8,46 +8,46 @@ public class Procesador {
 			int tiempoFinalizacionTarea) {
 		// TODO Auto-generated constructor stub
 	}
-	int getTiempoCambioCuatum(){
+	public int getTiempoCambioCuatum(){
 		return this.tiempoCambioCuatum;
 	}
-	
-	void setTiempoCambioCuatum(int tiempoCambioCuatum){
+
+	public void setTiempoCambioCuatum(int tiempoCambioCuatum){
 		this.tiempoCambioCuatum = tiempoCambioCuatum;
 	}
-	int getTiempoVencimientoCuantum(){
+	public int getTiempoVencimientoCuantum(){
 		return this.tiempoVencimientoCuantum;
 	}
-	
-	void setTiempoVencimientoCuantum(int tiempoVencimientoCuantum){
+
+	public void setTiempoVencimientoCuantum(int tiempoVencimientoCuantum){
 		this.tiempoVencimientoCuantum = tiempoVencimientoCuantum;
 	}
-	int getTiempoBloqueo(){
+	public int getTiempoBloqueo(){
 		return this.tiempoBloqueo;
 	}
-	
-	void setTiempoBloqueo(int tiempoBloqueo){
+
+	public void setTiempoBloqueo(int tiempoBloqueo){
 		this.tiempoBloqueo = tiempoBloqueo;
 	}
-	int getTiempoFinalizacionTarea(){
+	public int getTiempoFinalizacionTarea(){
 		return this.tiempoFinalizacionTarea;
 	}
-	
-	void setTiempoFinalizacionTarea(int tiempoFinalizacionTarea){
+
+	public void setTiempoFinalizacionTarea(int tiempoFinalizacionTarea){
 		this.tiempoFinalizacionTarea = tiempoFinalizacionTarea;
 	}
-	String getNombre(){
+	public String getNombre(){
 		return this.nombre;
 	}
-	
-	void setNombre(String nombre){
+
+	public void setNombre(String nombre){
 		this.nombre = nombre;
 	}
-	ArrayList getHistorial(){
+	public ArrayList getHistorial(){
 		return this.historial;
 	}
-	
-	void setHistorial(ArrayList historial){
+
+	public void setHistorial(ArrayList historial){
 		this.historial = historial;
 	}
 	public void agregar (Proceso proceso){
@@ -55,12 +55,34 @@ public class Procesador {
 		historial.add(proceso);
 	}
 
-	public void ejecutarProceso(){
-		int restante= historial.get(historial.size()-1).tiempoEjecucion;
-		do{
-			
-		}while(restante>tiempoVencimientoCuantum);
+	public void ejecutarProceso(Proceso proceso){
+		int restante= proceso.tiempoEjecucion;
+		if(historial.size()!=0){
+			tiempoFinalizacionTarea+=tiempoCambioCuatum;
+		}
+		while(restante>tiempoVencimientoCuantum){
+			restante-=tiempoVencimientoCuantum;
+			tiempoFinalizacionTarea+=tiempoVencimientoCuantum;
+			tiempoFinalizacionTarea+=tiempoCambioCuatum;
+
+		}	
+		tiempoFinalizacionTarea+=restante;
+		proceso.bloqueo*=tiempoBloqueo;
+		tiempoFinalizacionTarea+=proceso.bloqueo;
+		proceso.tiempoFinal=tiempoFinalizacionTarea;
+		proceso.tiempoTotal=proceso.tiempoFinal-proceso.tiempoInicial;
 		//Al último proceso en la lista se va restando para ir calculando el tiempo de finalizacion, con esto activo buscar procesador
 	}
-	
+	public void nuevoProceso(Proceso proceso) {
+		proceso.tiempoInicial=tiempoFinalizacionTarea;
+		ejecutarProceso(proceso);
+		historial.add(proceso);
+	}
+	public void imprimir(){
+		System.out.println("Procesador: "+nombre+"\n\tHistorial:");
+		for(int i=0;i<historial.size();i++){
+			System.out.println("\t\t\tProceso: "+ historial.get(i).nombre + "\n Tiempo de Ejecucion: " + historial.get(i).tiempoEjecucion + "\n Tiempo Bloqueado: " + historial.get(i).bloqueo +"\n Tiempo Total: "+	historial.get(i).tiempoTotal +"\nTiempo Inicial: " + historial.get(i).tiempoInicial + " Tiempo Final: "	+historial.get(i).tiempoFinal);
+		}
+	}
+
 }

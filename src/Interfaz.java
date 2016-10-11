@@ -1,3 +1,6 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -101,6 +104,15 @@ public class Interfaz extends javax.swing.JFrame {
 				);
 
 		pack();
+		jButton1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				iniciar();
+			}
+
+			
+
+			
+		});
 	}// </editor-fold>                        
 
 	/**
@@ -137,7 +149,7 @@ public class Interfaz extends javax.swing.JFrame {
 			}
 		});
 	}
-	public void llenar(){
+	/*public void llenar(){
 		Controlador c = new Controlador();
 		model= c.contruir(5,JOptionPane.showInputDialog("Escriba el orden, en  el cual los procesos serán atendidos"));
 		tabla=new JTable(model);//Table 
@@ -145,10 +157,16 @@ public class Interfaz extends javax.swing.JFrame {
 		//Esto va en el listener
 		Controlador con = new Controlador();
 		con.registrarProcesadores(Integer.parseInt(jTextField3.getText()), Integer.parseInt(jTextField2.getText()), Integer.parseInt(jTextField4.getText()));
+	}*/
+	private void iniciar() {
+		String cadena= JOptionPane.showInputDialog("¿Indique el orden en el que los procesos serán atendidos?");
+		con.configurarProcesador(Integer.parseInt(jTextField3.getText()), Integer.parseInt(jTextField2.getText()), Integer.parseInt(jTextField4.getText()),Integer.parseInt(jTextField1.getText()),cadena);
+		
 	}
 	DefaultTableModel model;
 	JTable tabla;
 	JScrollPane bar;//Scroll of the table
+	Controlador con;
 
 	// Variables declaration - do not modify                     
 	private javax.swing.JButton jButton1;

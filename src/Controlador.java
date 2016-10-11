@@ -1,45 +1,53 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Controlador {
 	public Procesador [] procesadores;
-	public Proceso [] procesos;
+	public ArrayList<Proceso> procesos;
 	String [] tableName={"Folio","Nombre:","Apellido Paterno:","Apellido Materno:","Fecha de Nacimiento:","DirecciÛn:"};
 	Object content [][];//Body of the table
 	DefaultTableModel model;
 
-	public DefaultTableModel contruir(int disponibles, String procesos){
-		procesadores = new Procesador[disponibles];
-		//registrarProcesadores(argumentos)
-		iniciar(procesos);	
-		return llenar();
-	}
-	public void registrarProcesadores(int tiempoCambioCuatum,int tiempoVencimientoCuantum,int tiempoBloqueo){
+
+
+	public void configurarProcesador(int tiempoCambioCuatum,int tiempoVencimientoCuantum,int tiempoBloqueo, int micros,String cadena){
+		procesadores = new Procesador[micros];
 		for(int i=0;i<procesadores.length;i++){
 			procesadores[i]=new Procesador(new ArrayList<Proceso>(),(i+1)+"", tiempoCambioCuatum,tiempoVencimientoCuantum,tiempoBloqueo, 0);
 		}
+		configurarProcesos(cadena);
 	}
-	public void iniciar(String procesos){
-		for(int i=0;i<procesos.length();i++){
-			//Lee la cadena
-			buscarProcesadorDisponible();
+	public void configurarProcesos(String cadena){
 
+		procesos = new ArrayList<Proceso>();
+		for(int i=0;i<cadena.length();i++){
+			int bloqueos,duracion;
+			duracion=Integer.parseInt(JOptionPane.showInputDialog("Indique la duración del proceso "+cadena.charAt(i)));//Lee la cadena
+			bloqueos=Integer.parseInt(JOptionPane.showInputDialog("Indique las veces que el proceso "+cadena.charAt(i)+"se bloqueará"));//Lee la cadena	
+			//objeto proceso 
+			procesos.add(new Proceso(""+cadena.charAt(i),duracion, bloqueos,0,0,0));
 		}
+		buscarProcesadorDisponible();
 	}
 	public void buscarProcesadorDisponible(){
-		int indice=0,mayor=procesadores[0].tiempoFinalizacionTarea;
-		for(int i=0;i<procesadores.length;i++){
-			if(mayor>procesadores[i].tiempoFinalizacionTarea){
-				mayor=procesadores[i].tiempoFinalizacionTarea;
-				indice=i;
+		while(procesos.size()>0){
+			int indice=0,mayor=procesadores[0].tiempoFinalizacionTarea;
+			for(int j=0;j<procesadores.length;j++){
+				if(mayor>procesadores[j].tiempoFinalizacionTarea){
+					mayor=procesadores[j].tiempoFinalizacionTarea;
+					indice=j;
+				}
 			}
+			asignarProcesadorDisponible(indice);
 		}
-		asignarProcesadorDisponible(indice);
 
 	}
 	public void asignarProcesadorDisponible(int indice){
-		
+		procesadores[indice].nuevoProceso(procesos.get(0));
+		procesos.remove(0);
+
 	}
 
 	public  DefaultTableModel llenar() {
